@@ -1,10 +1,10 @@
-package com.shaluyadav.task_scheduler;
+package com.shaluyadav.taskscheduler;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TaskSchedulerApplicationTests {
+class DistributedTaskSchedulerApplicationTests {
 
 	@Test
 	void contextLoads() {

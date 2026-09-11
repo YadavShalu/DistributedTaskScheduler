@@ -1,18 +1,18 @@
 spring:
   application:
-    name: task-scheduler
+    name: distributed-task-scheduler
   datasource:
     url: jdbc:postgresql://localhost:5432/scheduler
     username: scheduler
     password: scheduler
+    driver-class-name: org.postgresql.Driver
   jpa:
-    hibernate: 
-      ddl-auto: update  
+    hibernate:
+      ddl-auto: update
     show-sql: true
-  
+
 redisson:
   address: redis://localhost:6379
-
 
 server:
   port: 8080
