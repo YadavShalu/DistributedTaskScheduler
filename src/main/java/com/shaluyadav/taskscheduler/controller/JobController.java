@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/jobs")
 public class JobController {
     private final JobService jobService;
-
+    
     
 }

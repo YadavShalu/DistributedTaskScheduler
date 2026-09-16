@@ -11,8 +11,6 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 @Entity 
 @Table(name="jobs")
@@ -31,7 +29,7 @@ public class Job {
     private String handlerType;
 
     @Column(name = "handler_config", columnDefinition = "jsonb", nullable = false)
-    private Map<String, Object> handlerConfig;
+    private String handlerConfig;
 
     @Column (name = "max_retries", nullable = false)
     private int maxRetries=5;
@@ -82,11 +80,11 @@ public class Job {
         this.handlerType = handlerType;
     }
 
-    public Map<String, Object> getHandlerConfig(){
+    public String getHandlerConfig(){
         return handlerConfig;
     }
 
-    public void sethandlerConfig(Map<String,Object> handlerConfig){
+    public void setHandlerConfigJson(String handlerConfig){
         this.handlerConfig = handlerConfig;
     }
 

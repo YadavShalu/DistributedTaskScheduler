@@ -38,6 +38,10 @@ public class JobDependency {
         return id.getJobId();
     }
 
+    public UUID getDependsOnJobId() {
+        return id.getDependsOnJobId();
+    }
+
     @Embeddable 
     @Getter 
     @Setter 

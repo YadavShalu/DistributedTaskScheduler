@@ -1,7 +1,10 @@
 package com.shaluyadav.taskscheduler.service;
 
+import com.shaluyadav.taskscheduler.exceptions.InvalidCronExpressionException;
+
 import java.time.ZonedDateTime;
 
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.cronutils.model.Cron;
 import com.cronutils.parser.CronParser;
@@ -16,16 +19,27 @@ public class CronService {
         CronDefinitionBuilder.instanceDefinitionFor(CronType.UNIX)
     );
 
+    public void validate(String cronExpression){
+        try{
+            Cron cron = parser.parse(cronExpression);
+            cron.validate();
+
+        }catch(IllegalArgumentException e){
+            throw new InvalidCronExpressionException(
+                "Invalid cron expression '"+ cronExpression + "': " + e.getMessage(), e
+            );
+        }
+    }
+
     public ZonedDateTime nextFireTime(String cronExpression, ZonedDateTime from){
         Cron cron = parser.parse(cronExpression);
-        cron.validate();
         ExecutionTime executionTime = ExecutionTime.forCron(cron);
 
-        return executionTime.nextExecution(from)
-            .orElseThrow(() -> new IllegalArgumentException("No future execution for: " + cronExpression));
-
+        Optional<ZonedDateTime> next= executionTime.nextExecution(from);
+        return next.orElseThrow(() -> new InvalidCronExpressionException(
+            "Cron expression '"+ cronExpression + "' has no future execution after "+ from));
+        
     }
-    
 
     
 }
