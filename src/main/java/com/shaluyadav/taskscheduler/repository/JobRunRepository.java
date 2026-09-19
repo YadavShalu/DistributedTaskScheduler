@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 public interface JobRunRepository extends JpaRepository<JobRun,UUID>{
-    Optional<JobRun> findTopByJobOrderByCreatedAtDesc(UUID jobId);
+    Optional<JobRun> findTopByJobIdOrderByCreatedAtDesc(UUID jobId);
 
     List<JobRun> findByJobIdOrderByCreatedAtDesc(UUID jobId, Pageable pageable);
 

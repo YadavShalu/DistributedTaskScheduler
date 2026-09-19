@@ -29,7 +29,7 @@ public class RetryService {
     private static final String DEAD_LETTERED_LIST_KEY = "dead_lettered_queue";
 
 
-    @Value("$scheduler.backoff-base-ms:10000}")
+    @Value("${scheduler.backoff-base-ms:10000}")
     private long backoffBaseMs;
 
     @Value("${scheduler.backOff-max-ms:300000}")

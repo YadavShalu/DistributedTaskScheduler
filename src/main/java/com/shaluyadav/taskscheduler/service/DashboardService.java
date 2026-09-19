@@ -53,7 +53,7 @@ public class DashboardService {
     }
 
     private JobSummary buildSummary(Job job) {
-        Optional<JobRun> lastRun = jobRunRepository.findTopByJobOrderByCreatedAtDesc(job.getId());
+        Optional<JobRun> lastRun = jobRunRepository.findTopByJobIdOrderByCreatedAtDesc(job.getId());
 
         return JobSummary.builder()
             .id(job.getId())

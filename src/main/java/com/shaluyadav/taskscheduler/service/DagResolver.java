@@ -31,7 +31,7 @@ public class DagResolver {
     }
 
     public boolean hasSucceeded(UUID parentJobId){
-        Optional<JobRun> mostRecentRun = jobRunRepository.findTopByJobOrderByCreatedAtDesc(parentJobId);
+        Optional<JobRun> mostRecentRun = jobRunRepository.findTopByJobIdOrderByCreatedAtDesc(parentJobId);
 
         return mostRecentRun
             .map(run -> run.getStatus() == RunStatus.SUCCEEDED)

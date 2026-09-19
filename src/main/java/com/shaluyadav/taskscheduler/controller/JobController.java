@@ -37,7 +37,7 @@ public class JobController {
 
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity<JobResponse> getJob(@PathVariable UUID id){
         Job job = jobService.getJob(id);
         return ResponseEntity.ok(JobResponse.from(job));

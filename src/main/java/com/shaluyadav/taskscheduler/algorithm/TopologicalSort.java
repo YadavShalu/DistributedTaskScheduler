@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import org.springframework.stereotype.Component;
+
+
+@Component 
 public class TopologicalSort {
     
     public List<String>sort(Map<String, List<String>>adjacency){
