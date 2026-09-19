@@ -111,5 +111,7 @@ public class Job {
     public void setEnabled(boolean enabled){
         this.enabled = enabled;
     }
+
+    
 }
 
