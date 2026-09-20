@@ -6,6 +6,9 @@ import com.shaluyadav.taskscheduler.repository.JobRepository;
 import com.shaluyadav.taskscheduler.service.DagResolver;
 import com.shaluyadav.taskscheduler.service.JobService;
 
+// import jakarta.annotation.PostConstruct;
+
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import org.springframework.stereotype.Component;
@@ -39,6 +42,19 @@ public class SchedulerLoop {
         this.dagResolver = dagResolver;
         this.jobDispatcher = jobDispatcher;
     }
+
+    // @PostConstruct
+    // public void initialize() {
+    //     for (Job job : jobRepository.findAll()) {
+    //         if (job.isEnabled() && job.getCronExpression() != null) {
+    //             ZonedDateTime nextFireTime = jobService.computeNextFireTime(job);
+    //             register(job.getId(), nextFireTime);
+
+    //             log.info("Registered job {} with next fire time {}",
+    //                     job.getId(), nextFireTime);
+    //         }
+    //     }
+    // }
 
     public void register(UUID jobId, ZonedDateTime fireTime){
         if(fireTime == null){
@@ -74,6 +90,21 @@ public class SchedulerLoop {
             }
         }finally{
             heapLock.unlock();
+        }
+    }
+    @EventListener 
+    public void onJobCreated(ScheduleJobEvent event){
+        Job job = jobRepository.findById(event.jobId()).orElse(null);
+
+        if(job != null && job.isEnabled() && job.getCronExpression() != null){
+            ZonedDateTime nextFireTime = jobService.computeNextFireTime(job);
+            register(job.getId(), nextFireTime);
+
+            log.info(
+                "New job {} registered with next fire time {}",
+                job.getId(),
+                nextFireTime
+            );
         }
     }
 
