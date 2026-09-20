@@ -38,16 +38,16 @@ public class WorkerRegistry {
         log.info("Rebuilt consistent hash ring from Redis with {} existing workers", currentWorkerIds.size());
     }
 
-    public void registerOrHeartbeat(String workerId, String baseUrl) {
+    public void registerOrHeartbeat(String workerId, String baseURL) {
         long expiresAtEpochMillis = Instant.now().plusSeconds(heartbeatTtlSeconds).toEpochMilli();
 
         redisTemplate.opsForZSet().add(HEARTBEAT_ZSET_KEY, workerId, expiresAtEpochMillis);
 
-        redisTemplate.opsForHash().put(URL_HASH_KEY, workerId, baseUrl);
+        redisTemplate.opsForHash().put(URL_HASH_KEY, workerId, baseURL);
 
         ring.addWorker(workerId);
 
-        log.info("Worker {} registered/heartbeat at {}, expires in {}s", workerId, baseUrl, heartbeatTtlSeconds);
+        log.info("Worker {} registered/heartbeat at {}, expires in {}s", workerId, baseURL, heartbeatTtlSeconds);
     }
 
     public void deregister(String workerId) {
