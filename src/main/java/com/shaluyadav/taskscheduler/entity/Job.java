@@ -10,12 +10,16 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
-import java.util.Map;
 import java.util.UUID;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity 
 @Table(name="jobs")
+@Getter 
+@Setter
 public class Job {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.UUID)
@@ -50,71 +54,7 @@ public class Job {
 
     }
 
-    // Getters and Setters
-    public UUID getId(){
-        return id;
-    }
-
-    public void setId(UUID id){
-        this.id = id;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public String getCronExpression(){
-        return cronExpression;
-    }
-
-    public void setCronExpression(String cronExpression){
-        this.cronExpression = cronExpression;
-    }
-
-    public String getHandlerType(){
-        return handlerType;
-    }
-
-    public void setHandlerType(String handlerType){
-        this.handlerType = handlerType;
-    }
-
-    public String getHandlerConfig(){
-        return handlerConfig;
-    }
-
-    public void setHandlerConfigJson(String handlerConfig){
-        this.handlerConfig = handlerConfig;
-    }
-
-    public int getMaxRetries(){
-        return maxRetries;
-    }
-
-    public void setMaxRetries(int maxRetries){
-        this.maxRetries = maxRetries;
-    }
     
-    public int getTimeoutSeconds(){
-        return timeoutSeconds;
-    }
-
-    public void setTimeoutSeconds(int timeoutSeconds){
-        this.timeoutSeconds = timeoutSeconds;
-    }
-
-    public boolean isEnabled(){
-        return enabled;
-    }
-    
-    public void setEnabled(boolean enabled){
-        this.enabled = enabled;
-    }
-
     
 }
 
