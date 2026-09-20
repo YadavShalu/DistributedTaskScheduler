@@ -5,11 +5,12 @@ import com.shaluyadav.taskscheduler.entity.Job;
 import com.shaluyadav.taskscheduler.entity.JobDependency;
 import com.shaluyadav.taskscheduler.repository.JobDependencyRepository;
 import com.shaluyadav.taskscheduler.repository.JobRepository;
-
+import com.shaluyadav.taskscheduler.scheduler.ScheduleJobEvent;
 import com.shaluyadav.taskscheduler.dto.CreateJobRequest;
 
 import org.springframework.stereotype.Service;
 
+import org.springframework.context.ApplicationEventPublisher;
 
 import jakarta.transaction.Transactional;
 import tools.jackson.databind.ObjectMapper;
@@ -28,15 +29,18 @@ public class JobService {
     private final CronService cronService;
     private final TopologicalSort topologicalSort;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ApplicationEventPublisher eventPublisher;
 
     public JobService(JobRepository jobRepository, 
         JobDependencyRepository dependencyRepository,
         CronService cronService,
-        TopologicalSort topologicalSort) {
+        TopologicalSort topologicalSort,
+        ApplicationEventPublisher applicationEventPublisher) {
             this.jobRepository = jobRepository;
             this.dependencyRepository = dependencyRepository;
             this.cronService = cronService;
             this.topologicalSort = topologicalSort;
+            this.eventPublisher = applicationEventPublisher;
 
         }
 
@@ -60,13 +64,16 @@ public class JobService {
         job.setName(request.getName());
         job.setCronExpression(request.getCronExpression());
         job.setHandlerType(request.getHandlerType());
-        job.setHandlerConfigJson(serializeHandlerConfig(request.getHandlerConfig()));
+        job.setHandlerConfig(serializeHandlerConfig(request.getHandlerConfig()));
         job.setMaxRetries(request.getMaxRetries());
         job.setTimeoutSeconds(request.getTimeoutSeconds());
         job.setEnabled(true);
 
         Job savedJob = jobRepository.save(job);
 
+        if(savedJob.getCronExpression() != null){
+            eventPublisher.publishEvent(new ScheduleJobEvent(savedJob.getId()));
+        }
 
         for(UUID parentId: request.getDependsOn()){
             JobDependency dependency = new JobDependency(savedJob.getId(), parentId);
@@ -75,6 +82,8 @@ public class JobService {
         }
         return savedJob;
     }
+
+    
 
     public Job getJob(UUID id){
         return jobRepository.findById(id)
