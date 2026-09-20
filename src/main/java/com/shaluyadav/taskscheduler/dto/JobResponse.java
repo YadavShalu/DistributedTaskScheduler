@@ -50,6 +50,7 @@ public class JobResponse {
             .maxRetries(job.getMaxRetries())
             .timeoutSeconds(job.getTimeoutSeconds())
             .enabled(job.isEnabled())
+            .createdAt(job.getCreatedAt())
             .build();
     }
 }
